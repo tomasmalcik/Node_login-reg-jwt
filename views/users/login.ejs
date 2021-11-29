@@ -1,4 +1,7 @@
 <h2>login</h2>
+<% if(locals.errorMessage) { %>
+    <div><%= locals.errorMessage %></div>
+<% } %>   
 
 <form action="/login" method="POST">
     <div>
@@ -6,8 +9,11 @@
         <input type="email" name="email" id="email" required />
     </div>
     <div>
-        <label for="email">Password:</label>
+        <label for="password">Password:</label>
         <input type="password" name="password" id="password" required />
     </div>
     <button type="submit">Sign in</button>
 </form>
+<% if(locals.status == "success") { %>
+    <p>Token: <%= locals.token %></p>
+<% } %>

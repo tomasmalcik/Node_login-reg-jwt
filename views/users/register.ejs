@@ -1,21 +1,24 @@
+<% if(locals.status == 'error') { %>
+    <div><%= locals.error %></div>
+<% } %>   
 <h2>Register</h2>
 
 <form method="post" action="/register">
     <div>
         <label for="name">name</label>
-        <input type="text" name="name" id="name" required/>
+        <input type="text" name="name" id="name" min="6" value="<%= user.name %>" required/>
     </div>
     <div>
         <label for="email">email</label>
-        <input type="email" name="email" id="email" required/>
+        <input type="email" name="email" id="email" min="6" value="<%= user.email %>" required/>
     </div>
     <div>
         <label for="password">password</label>
-        <input type="password" name="password" id="password" required/>
+        <input type="password" name="password" id="password" min="6" required/>
     </div>
     <div>
         <label for="password2">password again</label>
-        <input type="password" name="password2" id="password2" required/>
+        <input type="password" name="password2" id="password2" min="6" required/>
     </div>
     <button type="submit">Register</button>
 </form>
