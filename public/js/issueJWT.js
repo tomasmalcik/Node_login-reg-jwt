@@ -1,9 +1,5 @@
 const jwt = require("jsonwebtoken")
 const path = require("path")
-const fs = require("fs")
-
-const pathToKey = path.join(__dirname, '..', '..', 'id_rsa_priv.pem')
-const priv_key = fs.readFileSync(pathToKey, 'utf8')
 
 async function issueJWT(user) {
     const _id = user._id
@@ -12,10 +8,13 @@ async function issueJWT(user) {
 
     const payload = {
         sub: _id,
-        iat: Date.now()
+        iat: Date.now(),
+        honza: "smrdi"
     }
 
-    const signedToken = jwt.sign(payload, process.env.TOKEN_SECRET)
+    const signedToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        expiresIn: expiresIn
+    })
 
     return {
         token: signedToken,

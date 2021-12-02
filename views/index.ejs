@@ -1,1 +1,170 @@
-<h2>Hello</h2>
+<div class="wrapper">
+    <div class="blur"></div>
+    <div class="login-form">
+        <div class="col-lg-3">
+            <div class="header">
+                <div class="logo"></div>
+            </div>
+            <form action="/users/login">
+                <div class="bg-darker">
+                    <div class="col-lg-10 offset-lg-1 bt">
+                        <div class="form-group">
+                            <input class="form-control" type="email" name="log_email" id="log_email" autocomplete="off" required
+                            onkeyup="this.setAttribute('value', this.value);" value="<%= user.reg_email %>" />
+                            <span class="highlight"></span>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="log_password" id="log_password" required
+                            onkeyup="this.setAttribute('value', this.value);" value="" />
+                            <span class="highlight"></span>
+                            <label for="password">Password</label>
+                        </div>
+                        <a class="forgotten" href="#">Forgotten password</a>
+                    </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#1b242f" fill-opacity="1" d="M0,96L48,101.3C96,107,192,117,288,128C384,139,480,149,576,176C672,203,768,245,864,240C960,235,1056,181,1152,133.3C1248,85,1344,43,1392,21.3L1440,0L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+                  </svg>
+                <div class="bg-lighter">
+                    <div class="col-lg-10 offset-lg-1">
+                        <div class="form-group butt-send">
+                            <button type="submit">Log in</button>
+                            <small>Don't have an account yet? <a class="sign" onclick="showRegister()" href="#">Sign Up</a></small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="register-form">
+        <div class="wrap col-lg-6">
+            <div class="header">
+                <div class="logo"></div>
+            </div>
+            <form action="/users/register" method="POST">
+                <div class="bg-darker">
+                    <div class="col-lg-10 offset-lg-1">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 pr">
+                                    <input type="text" class="form-control" name="reg_name" id="reg_name" autocomplete="off" required
+                                    onkeyup="this.setAttribute('value', this.value);" value="<%= user.reg_name %>" />
+                                    <span class="highlight"></span>
+                                    <label for="email">Name</label>
+                                </div>
+                                <div class="col-lg-6 pr">
+                                    <input type="text" class="form-control" name="reg_surname" id="reg_surname" autocomplete="off" required
+                                    onkeyup="this.setAttribute('value', this.value);" value="<%= user.reg_surname %>" />
+                                    <span class="highlight"></span>
+                                    <label for="email">Surname</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="reg_email" id="reg_email" autocomplete="off" required
+                            onkeyup="this.setAttribute('value', this.value);" value="<%= user.reg_email %>" />
+                            <span class="highlight"></span>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 pr">
+                                    <input type="password" class="form-control" name="reg_password" id="reg_password" autocomplete="off" value="" required />
+                                    <span class="highlight"></span>
+                                    <label for="email">Password</label>
+                                </div>
+                                <div class="col-lg-6 pr">
+                                    <input type="password" class="form-control" name="reg_password2" id="reg_password2" autocomplete="off" value="" required />
+                                    <span class="highlight"></span>
+                                    <label for="email">Password again</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#1b242f" fill-opacity="1" d="M0,96L48,101.3C96,107,192,117,288,128C384,139,480,149,576,176C672,203,768,245,864,240C960,235,1056,181,1152,133.3C1248,85,1344,43,1392,21.3L1440,0L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+                </svg>
+                <div class="bg-lighter">
+                    <div class="col-lg-6 offset-lg-3">
+                        <div class="form-group butt-send">
+                            <button type="submit">Sign Up</button>
+                            <small>Already have an account? <a class="sign" onclick="showLogin()" href="#">Sign In</a></small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    //Register form
+    const loginForm = document.querySelector(".login-form form")
+    const registerForm = document.querySelector(".register-form form")
+    loginForm.addEventListener("submit", async (ev) => {
+        ev.preventDefault()
+
+        const email = document.querySelector("#log_email").value
+        const password = document.querySelector("#log_password").value
+
+        const res = await fetch('/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                log_email: email,
+                log_password: password
+            })
+        }).then(res => res.json())
+
+        if(res.status == 'error') { //Login was not successfull, print error
+            displayBanner(res.error)
+        }else {
+            //create cookie, try accessing /profile
+            setCookie("token", res.data.token, 1)
+            window.location.href = "/profile"
+        }
+    })
+    
+    registerForm.addEventListener("submit", async (ev) => {
+        ev.preventDefault()
+
+        //get fields
+        const name = document.querySelector("#reg_name").value,
+              surname = document.querySelector("#reg_surname").value,
+              email = document.querySelector("#reg_email").value,
+              password = document.querySelector("#reg_password").value,
+              password2 = document.querySelector("#reg_password2").value
+
+        const res = await fetch('/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reg_name: name,
+                reg_surname: surname,
+                reg_email: email,
+                reg_password: password,
+                reg_password2: password2
+            })
+        }).then((res) => res.json())
+
+        if(res.status == 'error') {
+            displayBanner(res.error)
+        }else {
+            //Set cookie
+            setCookie('token', res.data.token, 1);   
+            window.location.href = '/profile'
+        }
+    })
+
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+</script>

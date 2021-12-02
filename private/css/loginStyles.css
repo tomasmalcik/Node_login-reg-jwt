@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700&display=swap');
+* {
+    font-family: 'Raleway', sans-serif;
+}
+body, html {
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(
+90deg, rgba(44,50,90,1) 0%, rgba(66,167,196,1) 100%);
+overflow: hidden;
+position: relative;
+}
+
+.banner {
+    position: absolute;
+    min-width: 300px;
+    height: 60px;
+    background: rgb(248, 215, 218);
+    top: 15px;
+    border-right: 10px solid rgb(245, 198, 203);
+    transition: all 0.4s ease-in-out 0s;
+    left: -100%;
+    display: flex;
+    padding: 0px 15px;
+    align-items: center;
+    color: #721c24;
+    z-index: 99;
+}
+
+.banner.shown{
+    left: 0;
+}
+
+/* Wrapper */
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.wrapper .blur {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: url(../img/background.jpg);
+    filter:brightness(0.7) hue-rotate(20deg) blur(5px);
+    background-position: center;
+}
+
+.wrapper .login-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper .login-form .col-lg-3 {
+    min-height: 100px;
+    background: #1b242f;
+    z-index: 99;
+    position: relative;
+}
+
+form .form-control {
+    border: none;
+}
+.wrapper .login-form .col-lg-3 .header {
+    width: 100%;
+    height: 200px;
+    background: #1b242f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper .logo {
+    width: 180px;
+    height: 180px;
+    background: url(../img/logo_notes.png);
+    background-position: center;
+    background-size: cover;
+}
+.bt {
+    padding-top: 30px;
+    border-top: 1px rgba(255,255,255,0.1) solid;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.form-group {
+    width: 100%;
+    position: relative;
+}
+.wrapper form input.form-control {
+    background: transparent;
+    border: none;
+    border-bottom: 2px rgb(155,155,155) solid;
+    border-radius: 0;
+    outline: none;
+    margin-bottom: 15px;
+
+}
+form a {
+    color: rgb(155,155,155);
+    text-decoration: none;
+}
+form input {
+    color: white!important;
+    position: relative;
+}
+form input:hover {
+    border-bottom: 2px #e31b6d solid!important;   
+}
+form input:focus {
+    box-shadow: none!important;
+    border-bottom: 2px #e31b6d solid!important;
+}
+.forgotten {
+    transition: .3s ease-in-out;
+}
+.forgotten:hover {
+    color: #e31b6d;
+    cursor: pointer;
+}
+.login-form small, .register-form small {
+    width: 100%;
+    text-align: center;
+}
+.sign {
+    color: #40c08b!important;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+}
+form button {
+    width: 100%;
+    background: transparent;
+    font-size: 20px;
+    border: 2.5px #1b242f solid;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    margin-bottom: 15px;
+    transition: .3s ease-in-out;
+}
+
+form button:hover, form button:focus {
+    background: #1b242f;
+    color: white;
+}
+
+form .bg-darker {
+    background-color: #1b242f;
+}
+
+form .bg-lighter {
+    background-color: white;
+}
+svg {
+    background: white;
+}
+.butt-send {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.register-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+
+.register-form .wrap.col-lg-6 {
+    min-height: 100px;
+    z-index: 99;
+    position: relative;
+}
+
+.register-form .header {
+    background: #1b242f;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.register-form input.form-control {
+    margin-bottom: 15px!important;
+}
+
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: flex;
+}
+
+form label {
+    color: #B1B1B1;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 0;
+    opacity: 0.5;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+    line-height: 35px;
+}
+
+form input:focus ~ label {
+    top: -25px;
+    left: 0;
+    font-size: 12px;
+    color: #e31b6d;
+    opacity: 1;
+}
+
+form input:valid ~ label {
+    top: -25px;
+    left: 0;
+    font-size: 12px;
+    color: #B1B1B1;
+    opacity: 1;
+}
+
+form input:not([value=""]):not(:focus):invalid {
+    border-color: red;
+}
+
+form input:not([value=""]):not(:focus):invalid ~ label{
+    top: -25px;
+    left: 0;
+    font-size: 12px;
+    color: red;
+    opacity: 1;
+}
+
+.pr {
+    position: relative;
+}
+
+.pr label {
+    left: 20px;
+}
+
+.pr input:valid ~ label, .pr input:focus ~ label{
+    left: 12px!important;
+}

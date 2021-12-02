@@ -2,23 +2,28 @@ const joi = require("joi")
 
 const registerValidation = (data) => {
     const registerSchema = joi.object({
-        name: joi.string().min(6).required()
+        reg_name: joi.string().min(6).required()
         .messages({
-            'String.min': 'Name should be at least 6 characters long',
-            'any.required': 'Name is required'
+            'string.min': 'Name should be at least 6 characters long',
+            'string.empty': 'Name is required'
         }),
-        email: joi.string().min(6).required().email()
+        reg_surname: joi.string().min(6).required()
         .messages({
-            'String.min': 'Emails should be at least 6 characters long',
-            'email.invalid': 'Email is invalid',
-            'any.required': 'Email is required'
+            'string.min': 'Surname should be at least 6 characters long',
+            'string.empty': 'Surname is required'
         }),
-        password: joi.string().min(6).required().label("Password")
+        reg_email: joi.string().min(6).required().email()
         .messages({
-            'String.min': 'Password should be at least 6 characters long',
-            'any.required': 'Password is required'
+            'string.min': 'Emails should be at least 6 characters long',
+            'string.email': 'Email is invalid',
+            'string.empty': 'Email is required'
         }),
-        password2: joi.any().equal(joi.ref('password')).required().label("Confirm password").messages({
+        reg_password: joi.string().min(6).required().label("Password")
+        .messages({
+            'string.min': 'Password should be at least 6 characters long',
+            'string.empty': 'Password is required'
+        }),
+        reg_password2: joi.any().equal(joi.ref('reg_password')).required().label("Confirm password").messages({
             'any.only': 'Password dont match'
          })
     })
@@ -27,11 +32,17 @@ const registerValidation = (data) => {
 
 const loginValidation = (data) => {
     const registerSchema = joi.object({
-        email: joi.string().min(6).required().email(),
-        password: joi.string().min(6).required()
+        log_email: joi.string().min(6).required().email().messages({
+            'string.email': 'Enter email in the correct form (a@b.com)',
+            'string.min': 'Email should be at least 6 characters long',
+          }),
+        log_password: joi.string().min(6).required().messages({
+            'string.empty': 'Password cannot be empty',
+            'string.min': 'Password is at least 6 characters long'
+        })
 
     })
-    return registerSchema.validate(data)
+    return registerSchema.validate(data, {abortEarly: false})
 }
 
 

@@ -17,6 +17,7 @@ require("./config/passport")(passport)
 //Routes
 const indexRouter = require("./routes/index")
 const usersRouter = require("./routes/users")
+const workspacesRouter = require("./routes/workspaces")
 
 //app sets
 app.set("view engine", "ejs")
@@ -25,12 +26,19 @@ app.set("layout", __dirname + "/views/layouts/layout")
 app.set('trust proxy', 1);
 
 //app uses
+app.use ((req, res, next) => {
+    res.locals.url = req.originalUrl;
+    res.locals.host = req.get('host');
+    res.locals.protocol = req.protocol;
+    next();
+});
 app.use(expressLayouts)
-app.use(express.static("public"))
+app.use(express.static("private"))
 app.use(express.json())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({limit: '10mb', extended: false}))
 app.use(passport.initialize())
+
 
 
 //Connect to db
@@ -41,5 +49,5 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, () => {
 //Routes middleware
 app.use(indexRouter)
 app.use(usersRouter)
-
+app.use(workspacesRouter)
 app.listen(3000)
