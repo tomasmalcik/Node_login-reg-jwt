@@ -1,0 +1,96 @@
+body {
+    position: relative;
+    background: #F7F7F7!important;
+}
+
+.banner {
+    position: absolute;
+    min-width: 300px;
+    height: 60px;
+    background: rgb(248, 215, 218);
+    top: 15px;
+    border-right: 10px solid rgb(245, 198, 203);
+    transition: all 0.4s ease-in-out 0s;
+    left: -100%;
+    display: flex;
+    padding: 0px 15px;
+    align-items: center;
+    color: #721c24;
+    z-index: 99;
+}
+
+.banner.shown{
+    left: 0;
+}
+
+.wrapper-content {
+    height: 100vh;
+}
+
+.sidebar {
+    background: #1b242f;
+}
+
+.sidebar .nav-logo {
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+    border-bottom: 1px rgba(155,155,155,0.5) solid;
+}
+
+.sidebar .sidebar-content {
+    padding-top: 30px;
+}
+
+.sidebar .sidebar-content h3 {
+    color: white;
+    font-size: 22px;
+    font-weight: 100;
+}
+
+.sidebar .sidebar-content ul {
+    padding: 0;
+    margin-top: 15px;
+}
+
+.sidebar .sidebar-content ul li {
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.sidebar .sidebar-content ul li a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-weight: 100;
+}
+
+.wrapper .content {
+    padding: 0;
+}
+
+.content .navbar.navbar-light {
+    background: white!important;
+    padding: 10px 0px!important;
+}
+.collapse {
+    justify-content: flex-end;
+    padding: 0px 30px;
+}
+.content .navbar-nav {
+    align-items: center;
+}
+
+.content .navbar .navbar-nav li{
+    margin-left: 15px;
+}
+
+.content .navbar .usr {
+    width: 40px;
+    height: 40px;
+    background: red;
+    border-radius: 50%;
+    margin-left: 20px;
+    border: 1px black solid;
+}
