@@ -82,13 +82,17 @@ router.post("/users/register", validateForm('register'), checkUnique , async (re
         const role = await Role.findOne({name: "User"})
         const salt = await bcrypt.genSalt(10)
         const hashedPWD = await bcrypt.hash(req.body.reg_password, salt)
+        const avatarType = "image/png"
+        const avatarData = process.env.AVATAR_BASE
 
         const newUser = new User({
             name: req.body.reg_name,
             surname: req.body.reg_surname,
             email: req.body.reg_email,
             role: role._id,
-            password: hashedPWD
+            password: hashedPWD,
+            avatarType: avatarType,
+            avatar: new Buffer.from(avatarData, "base64")
         })
 
         newUser.save().then(async (user) => {
@@ -98,7 +102,13 @@ router.post("/users/register", validateForm('register'), checkUnique , async (re
                 status: 'success',
                 data: {
                     token: jwt.token,
-                    expiresIn: jwt.expires
+                    expiresIn: jwt.expires,
+                    user_data: {
+                        username: user.name,
+                        usersurname: user.surname,
+                        email: user.email,
+                        _id: user._id
+                    }
                 }
             })
         })
@@ -133,7 +143,14 @@ router.post("/users/login", validateForm('login'), async (req, res, next) => {
                         status: 'success',
                         data: {
                             token: data.token,
-                            expiresIn: data.expires
+                            expiresIn: data.expires,
+                            user_data: {
+                                username: user.name,
+                                usersurname: user.surname,
+                                email: user.email,
+                                avatar: user.avatarPath,
+                                _id: user._id
+                            }
                         }
                     })
                 }))
@@ -152,32 +169,6 @@ router.post("/users/login", validateForm('login'), async (req, res, next) => {
             error: `| Fatal | : ${error}`
         })
     }
-    })
-/*
-router.post("/login", async (req, res) => {
-    //Validate request body
-    const {error} = await validate.loginValidation(req.body)
-    if(error)
-       return res.render("users/login", {errorMessage: error})
+})
 
-    //Check if user with that email exists
-    const user = await User.findOne({email: req.body.email})
-    if(!user)
-        return res.render("users/login", {errorMessage: "Email or password is incorrect"})
-
-    //Check if password is the same using bcrypt
-
-    const validPassword = await bcrypt.compare(req.body.password, user.password)
-    if(!validPassword)
-        return res.render("users/login", {errorMessage: "Email or password is incorrect"})
-
-    //Generate token
-    const token = JWT.sign({
-        _id: user._id,
-        role: user.role,
-        name: user.name
-    }, process.env.TOKEN_SECRET)
-    
-    res.header('auth-token', token).redirect("/")
-})*/
 module.exports = router

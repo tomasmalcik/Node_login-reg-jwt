@@ -123,8 +123,10 @@
             displayBanner(res.error)
         }else {
             //create cookie, try accessing /profile
-            setCookie("token", res.data.token, 1)
-            window.location.href = "/profile"
+            //Set cookie
+            setCookie('token', res.data.token, 1);
+            window.localStorage.setItem("user_data", JSON.stringify(res.data.user_data))
+            window.location.href = "/workspaces"
         }
     })
     
@@ -156,8 +158,10 @@
             displayBanner(res.error)
         }else {
             //Set cookie
-            setCookie('token', res.data.token, 1);   
-            window.location.href = '/profile'
+            setCookie('token', res.data.token, 1);  
+            setCookie("user_data", JSON.stringify(res.data.user_data, 1)) 
+            console.log(res.data.user_data)
+            window.location.href = '/workspaces'
         }
     })
 

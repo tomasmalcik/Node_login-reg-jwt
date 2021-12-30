@@ -22,6 +22,7 @@ const listSchema = new mongoose.Schema({
 const workspaceSchema = mongoose.Schema({
     title: {
         type: String,
+        min: 3,
         required: true
     },
     author: {
@@ -34,7 +35,12 @@ const workspaceSchema = mongoose.Schema({
         required: false
     },
     lists: {
-        type: [listSchema]
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ToDoList'
+        }],
+        required: false,
+        default: []
     },
     createdAt: {
         type: Date,

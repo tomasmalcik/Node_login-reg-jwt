@@ -6,6 +6,7 @@ const express = require("express")
 const app = express()
 const expressLayouts = require("express-ejs-layouts")
 const mongoose = require("mongoose")
+mongoose.Promise = global.Promise;
 const bodyParser = require("body-parser")
 const path = require("path")
 const passport = require("passport")
@@ -18,6 +19,7 @@ require("./config/passport")(passport)
 const indexRouter = require("./routes/index")
 const usersRouter = require("./routes/users")
 const workspacesRouter = require("./routes/workspaces")
+const todolistsRouter = require("./routes/todolists")
 
 //app sets
 app.set("view engine", "ejs")
@@ -50,4 +52,7 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, () => {
 app.use(indexRouter)
 app.use(usersRouter)
 app.use(workspacesRouter)
-app.listen(3000)
+app.use(todolistsRouter)
+
+//Listen on port 3000 on dev or some port in production
+app.listen(process.env.PORT || 3000)

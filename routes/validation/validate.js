@@ -1,4 +1,5 @@
 const joi = require("joi")
+const mongoose = require("mongoose")
 
 const registerValidation = (data) => {
     const registerSchema = joi.object({
@@ -45,6 +46,18 @@ const loginValidation = (data) => {
     return registerSchema.validate(data, {abortEarly: false})
 }
 
+const workspaceValidation = (data) => {
+    console.log(data)
+    const workSchema = joi.object({
+        title: joi.string().min(3).required().messages({
+            'string.min': 'Title should be at least 3 characters long',
+            'string.empty': 'Title cannot be empty'
+        })
+    })
+    return workSchema.validate(data, {abortEarly: false})
+}
+
 
 module.exports.registerValidation = registerValidation
 module.exports.loginValidation = loginValidation
+module.exports.workspaceValidation = workspaceValidation

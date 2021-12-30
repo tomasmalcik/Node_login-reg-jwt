@@ -30,9 +30,23 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 6
     },
+    avatar: {
+        type: Buffer,
+        required: true
+    },
+    avatarType: {
+        type: String,
+        required: true
+    }, 
     createdAt: {
         type: Date,
         default: Date.now
+    }
+})
+
+userSchema.virtual('avatarPath').get(function() {
+    if(this.avatar != null && this.avatarType != null) {
+        return `data:${this.avatarType};charset=utf8;base64,${this.avatar.toString('base64')}`
     }
 })
 

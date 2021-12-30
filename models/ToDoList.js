@@ -6,9 +6,10 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     checked: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
-})
+}, { _id : false })
 
 const listSchema = new mongoose.Schema({
     //Title, items

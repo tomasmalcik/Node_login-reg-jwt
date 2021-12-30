@@ -1,3 +1,48 @@
+<div class="popup">
+  <div class="popup-content addWorkspace col-lg-4">
+      <span class="close" onclick="hidePopup()">X</span>
+      <h3>Add Workspace</h3>
+      <form method="POST" id="addWorkspace">
+          <div class="form-group">
+              <input type="text" class="form-control" name="workspace_name" id="workspace_name" />
+              <span class="highlight"></span>
+              <label for="email">Name of workspace</label>
+          </div>
+          <div class="form-group">
+              <textarea class="form-control" name="workspace_description" id="workspace_description"></textarea>
+              <span class="highlight"></span>
+              <label for="email">Description of workspace</label>
+          </div>
+          <div class="form-group">
+              <button type="submit">Create Workspace</button>
+          </div>
+      </form>
+  </div>
+  <div class="popup-content modal-window col-lg-4">
+      <span class="close" onclick="hidePopup()">X</span>
+      <h3>Delete Workspace?</h3>
+      <p>Are you sure?</p>
+      <div class="row">
+          <div class="col-lg-6">
+              <button id="deleteWorkspace">Yes</button>
+          </div>
+          <div class="col-lg-6">
+              <button>No</button>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-content export-window col-lg-6">
+    <span class="close" onclick="hidePopup()">X</span>
+    <h3>Export workspace</h3>
+    <div class="hint">
+      <i onclick="copyToClipboard()" onmouseout="outFunc()" class="far fa-copy"></i>
+      <span id="hintText" class="hintText">Copy to clipboard</span>
+    </div>
+    <textarea readonly name="jsonExport" id="jsonExport" class="form-control" style="height: 500px"></textarea>
+  </div>
+</div>
+
 <div class="wrapper container-fluid">
     <div class="row wrapper-content">
         <div class="col-lg-2 sidebar">
@@ -5,37 +50,253 @@
                 <span>ToDo - App</span>
             </div>
             <div class="sidebar-content">
-                <h3>Current Workspace</h3>
+                <h3>Workspaces</h3>
 
                 <ul>
-                    <li><a href="#"><i class="fas fa-users"></i> Add Contributors</a></li>
-                    <li><a href="#"><i class="fas fa-edit"></i>Edit workspace</a></li>
-                    <li><a href="#"><i class="fas fa-list"></i>Add List</a></li>
-                    <li><a href="#"><i class="fas fa-trash-alt"></i>Remove workspace</a></li>
-                    
+                    <li><a href="#" onclick="addWorkspace()"><i class="fas fa-plus"></i> Add Workspace</a></li>
+                    <li><a href="#"><i class="fas fa-file-upload"></i> Import Workspace</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
                 </ul>
             </div>
         </div>
         <div class="col-lg-10 content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <div class="usr"></div>
-                  </ul>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <div class="usr"></div>
+                </ul>
+              </div>
+            </nav>
+            <div class="workspace-content container">
+              <div class="breadcrumb">
+                Workspaces > dashboard
+              </div>
+              <div class="col-lg-10 workspace-wrapper">
+                <div>
+                 <!--
+                                    <div class="col-lg-4">
+                      <div class="wrap">
+                        <div class="headline">
+                          <h5>Test workspace</h5>
+                        </div>
+                        <div class="w-content">
+                          <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum error eaque similique assumenda optio corrupti</p>
+                          <div class="actions">
+                            <i class="fas fa-plus"><div class="pop">Add user to workspace</div></i>
+                            <i class="fas fa-pen"><div class="pop">Edit this workspace</div></i>
+                            <i class="far fa-trash-alt"><div class="pop">Scrap this workspace</div></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
+                -->
+                  <div class="no-work">
+                    <h4 class="no-workspaces">No workspaces created</h4>
+                    <div onclick="addWorkspace()" class="create-workspace full">
+                      <span>Create Workspace</span>
+                    </div>
+                  </div>
+                  <div class="row" id="workspaces">
+                  </div>
                 </div>
-              </nav>
+              </div>
+            </div>
         </div>
     </div>
 </div>
+<script defer src="./js/components/workspace.js"></script>
+<script defer>
+  workspaces = []
+
+  const fetchData = async () => {
+    res = await fetch('/api/workspaces', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((res) => res.json())
+    console.log(res)
+    workspaces = res.data
+  }
+
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  async function init_workspaces() {
+    //Fetch workspaces - has to be async, takes some time
+    await fetchData()
+    
+    //check if any workspaces were found
+    if (workspaces.length != 0) {
+      //Handle loading
+
+      //hide no_work
+      $(".no-work").hide()
+
+      displayWorkspaces()
+    }
+
+    //Load user
+    user = JSON.parse(window.localStorage.getItem("user_data"))
+    console.log(user)
+    
+    setUserOptions(user)
+
+
+    //set listener for adding workspace
+    const addWorkspaceForm = document.querySelector("#addWorkspace")
+    console.log(addWorkspaceForm)
+
+    addWorkspaceForm.addEventListener("submit", async (ev) => {
+      ev.preventDefault()
+
+      //get name of workspace
+      let wName = document.querySelector("#workspace_name")
+      let wDescription = document.querySelector("#workspace_description")
+
+      //Try to submit
+      let res = await fetch('/api/workspaces', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: wName.value,
+          author: user._id,
+          description: wDescription.value
+        })
+      }).then(res => res.json())
+
+      if(res.status == 'error') {
+        displayBanner(res.error)
+      }else if(res.status == 'success') {
+        await fetchData()
+        hidePopup()
+        wName.value = ""
+        wDescription.value = "" 
+        displayWorkspaces()
+        displaySuccess(res.data)
+      }
+
+    })
+  }
+
+  function displayWorkspaces() {
+    $(".no-work").hide()
+    let innerHTML = ""
+      workspaces.forEach(element => {
+        innerHTML += Workspace(element.title, element.description, element._id)
+      });
+      $("#workspaces").html(innerHTML)
+  }
+
+  function setUserOptions(user) {
+    const user_panel = document.querySelector(".usr")
+    user_panel.style.backgroundImage = "url("+user.avatar+")"
+    console.log(user)
+  }
+
+  function addWorkspace() {
+    //set visibility of all children to none, display only .addWorkspace using jQuery
+    $(".popup").children().hide()
+    $(".addWorkspace").show()
+    
+    //show popup
+    displayPopup()
+  }
+
+  function showModal(id) {
+    $(".popup").children().hide()
+    $(".modal-window").show()
+
+    //addEventListener to "yes"
+    document.getElementById("deleteWorkspace").setAttribute("onClick","deleteWorkspace('"+id+"')")
+    //show popup
+    displayPopup()
+  }
+
+  async function deleteWorkspace(id) {
+    const res = await fetch(`/api/workspaces/${id}`, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+      }      
+    }).then(res => res.json())
+
+    if(res.status == "error") {
+      displayBanner(res.error)
+    }else if(res.status == "success") { //Successfully deleted
+      await fetchData()
+      hidePopup()
+      if(workspaces.length == 0) {
+        $(".no-work").css("display","flex")
+        $("#workspaces").html("")
+      }else {
+        displayWorkspaces()
+      }
+      displaySuccess(res.data)
+    }
+  }
+
+  async function exportWorkspace(id) {
+
+    const res = await fetch(`/api/workspaces/${id}/export`, {
+      method: "GET"
+    }).then(res => res.json())
+    //remove ids and __v
+    res.data.lists.forEach(list => {
+      delete list._id
+      delete list.__v
+    })
+
+    $(".popup").children().hide()
+    //add to textarea
+    $("#jsonExport").html(JSON.stringify(res.data, undefined, 4))
+    $(".export-window").show()
+    displayPopup()
+  }
+  
+  function copyToClipboard() {
+    var copyText = document.getElementById("jsonExport");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+
+    document.getElementById("hintText").innerHTML = "Copied!"
+  }
+
+  function outFunc() {
+    document.getElementById("hintText").innerHTML = "Copy to clipboard"
+  }
+
+
+
+  init_workspaces()
+</script>
